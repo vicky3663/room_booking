@@ -1,0 +1,30 @@
+{
+    "name": "Meeting Room Booking",
+    "summary": "Manage meeting rooms and room bookings",
+    "description": """
+Meeting Room Booking
+====================
+
+A small training module used to manage meeting rooms and bookings.
+
+It allows employees to book meeting rooms for specific time slots,
+while providing room configuration, booking history, and reminders.
+""",
+    "version": "18.0.1.0.0",
+    "category": "Productivity",
+    "author": "Dark",
+    "website": "https://www.example.com",
+    "license": "LGPL-3",
+    "icon": "/room_booking/static/description/icon.png",
+    "application": True,
+    "installable": True,
+    "depends": [
+        "base",
+        "mail",
+    ],
+    "data": [
+        "security/ir.model.access.csv",
+    ],
+    "demo": [],
+    "assets": {},
+}
