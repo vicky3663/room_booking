@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_room_booking_room_list" model="ir.ui.view">
+        <field name="name">room.booking.room.list</field>
+        <field name="model">room.booking.room</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="capacity"/>
+                <field name="floor"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_room_booking_room_form" model="ir.ui.view">
+        <field name="name">room.booking.room.form</field>
+        <field name="model">room.booking.room</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_view_bookings"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-calendar"
+                        >
+                            <field
+                                name="booking_count"
+                                widget="statinfo"
+                                string="Bookings"
+                            />
+                        </button>
+                    </div>
+                    <group>
+                        <field name="name"/>
+                        <field name="active"/>
+                        <field name="capacity"/>
+                        <field name="floor"/>
+                        <field name="equipment_ids"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>
