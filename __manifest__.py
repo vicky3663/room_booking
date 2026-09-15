@@ -24,6 +24,10 @@ while providing room configuration, booking history, and reminders.
     ],
     "data": [
         "security/ir.model.access.csv",
+        "views/room_booking_equipment_views.xml",
+        "views/room_booking_room_views.xml",
+        "views/room_booking_views.xml",
+        "views/room_booking_menu.xml",
     ],
     "demo": [],
     "assets": {},
