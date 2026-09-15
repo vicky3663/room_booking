@@ -20,6 +20,20 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_view_bookings"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-calendar"
+                        >
+                            <field
+                                name="booking_count"
+                                widget="statinfo"
+                                string="Bookings"
+                            />
+                        </button>
+                    </div>
                     <group>
                         <field name="name"/>
                         <field name="active"/>

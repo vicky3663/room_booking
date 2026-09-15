@@ -1,5 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="view_room_booking_search" model="ir.ui.view">
+        <field name="name">room.booking.search</field>
+        <field name="model">room.booking</field>
+        <field name="arch" type="xml">
+            <search>
+
+                <field name="name"/>
+                <field name="room_id"/>
+                <field name="organizer_id"/>
+                <field name="state"/>
+
+                <filter
+                    name="my_bookings"
+                    string="My Bookings"
+                    domain="[('organizer_id', '=', uid)]"
+                />
+
+                <filter
+                    name="start_date"
+                    string="Start Date"
+                    date="start"
+                >
+                    <filter
+                    name="today"
+                    string="Today"
+                    domain="[
+                        ('start', '&gt;=', context_today().strftime('%%Y-%%m-%%d 00:00:00')),
+                        ('start', '&lt;', (context_today() + datetime.timedelta(days=1)).strftime('%%Y-%%m-%%d 00:00:00'))
+                    ]"
+                />
+
+               <!-- <filter
+                    name="this_week"
+                    string="This Week"
+                    domain="[
+                        ('start', '&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%%Y-%%m-%%d 00:00:00')),
+                        ('start', '&lt;', (context_today() + datetime.timedelta(days=7-context_today().weekday())).strftime('%%Y-%%m-%%d 00:00:00'))
+                    ]"
+                /> -->
+                </filter> 
+
+                <group expand="0" string="Group By">
+
+                    <filter
+                        name="group_by_room"
+                        string="Room"
+                        context="{'group_by': 'room_id'}"
+                    />
+
+                    <filter
+                        name="group_by_state"
+                        string="State"
+                        context="{'group_by': 'state'}"
+                    />
+
+                </group>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="view_room_booking_calendar" model="ir.ui.view">
+        <field name="name">room.booking.calendar</field>
+        <field name="model">room.booking</field>
+        <field name="arch" type="xml">
+            <calendar
+                string="Bookings"
+                date_start="start"
+                date_stop="stop"
+                color="state"
+            >
+                <field name="name"/>
+                <field name="room_id"/>
+                <field name="organizer_id"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
 
     <record id="view_room_booking_list" model="ir.ui.view">
         <field name="name">room.booking.list</field>
@@ -20,10 +98,42 @@
         <field name="model">room.booking</field>
         <field name="arch" type="xml">
             <form>
+
+                <header>
+                    <button
+                        name="action_confirm"
+                        type="object"
+                        string="Confirm"
+                        invisible="state != 'draft'"
+                    />
+
+                    <button
+                        name="action_done"
+                        type="object"
+                        string="Mark as Done"
+                        invisible="state != 'confirmed'"
+                    />
+
+                    <button
+                        name="action_cancel"
+                        type="object"
+                        string="Cancel"
+                        invisible="state not in ('draft', 'confirmed')"
+                    />
+
+                    <button
+                        name="action_reset_to_draft"
+                        type="object"
+                        string="Reset to Draft"
+                        invisible="state != 'cancelled'"
+                    />
+                </header>
+
                 <sheet>
                     <group>
                         <field name="name"/>
                         <field name="room_id"/>
+                        <field name="state"/>
                         <field name="organizer_id"/>
                         <field name="attendee_ids"/>
                         <field name="start"/>
@@ -31,6 +141,7 @@
                         <field name="note"/>
                     </group>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>

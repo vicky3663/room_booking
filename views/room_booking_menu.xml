@@ -5,7 +5,8 @@
     <record id="action_room_booking" model="ir.actions.act_window">
         <field name="name">Bookings</field>
         <field name="res_model">room.booking</field>
-        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_room_booking_search"/>
+        <field name="view_mode">calendar,list,form</field>
     </record>
 
     <!-- Rooms action -->
