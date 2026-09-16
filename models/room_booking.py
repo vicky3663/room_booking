@@ -26,7 +26,7 @@ class RoomBooking(models.Model):
             ("confirmed", "Confirmed"),
             ("done", "Done"),
             ("cancelled", "Cancelled"),
-        ], string="Status", default="draft", tracking=True)
+        ], string="Status", default="draft", tracking=True, copy="False")
 
     def action_confirm(self):
         for booking in self:

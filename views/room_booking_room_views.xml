@@ -8,7 +8,7 @@
             <list>
                 <field name="name"/>
                 <field name="capacity"/>
-                <field name="floor"/>
+                <field name="floor" widget="radio" />
                 <field name="active"/>
             </list>
         </field>
@@ -39,8 +39,12 @@
                         <field name="active"/>
                         <field name="capacity"/>
                         <field name="floor"/>
-                        <field name="equipment_ids"/>
                     </group>
+                    <notebook>
+                        <page string="Equipments">
+                            <field name="equipment_ids"/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>

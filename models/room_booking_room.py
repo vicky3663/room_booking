@@ -19,9 +19,13 @@ class RoomBookingRoom(models.Model):
         string="Capacity",
     )
 
-    floor = fields.Char(
-        string="Floor",
-    )
+    floor = fields.Selection(
+      [
+        ("floor1", "1"),
+        ("floor2", "2"),
+        ], string="Floor",  
+        
+    ) 
 
     equipment_ids = fields.Many2many(
         "room.booking.equipment",
@@ -58,3 +62,11 @@ class RoomBookingRoom(models.Model):
                 "default_room_id": self.id,
             },
         }
+
+    # @api.constrains("floor")
+    # def _check_floor_number(self):
+    #     for recipe in self:
+    #         if recipe.fruit_ids > 2 || recipe.fruit_ids < 1:
+    #             raise ValidationError(_("There Are Only 2 Floors."))
+
+       

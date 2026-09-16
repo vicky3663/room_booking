@@ -127,19 +127,31 @@
                         string="Reset to Draft"
                         invisible="state != 'cancelled'"
                     />
+                     <field name="state" widget="statusbar"
+                            statusbar_visible="draft,confirm,done"/>
                 </header>
 
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="room_id"/>
-                        <field name="state"/>
-                        <field name="organizer_id"/>
-                        <field name="attendee_ids"/>
-                        <field name="start"/>
-                        <field name="stop"/>
-                        <field name="note"/>
+                        <group>
+                            <field name="name" readonly="state == 'confirmed'"/>
+                            <field name="room_id" readonly="state == 'confirmed'"/>
+                            
+                        </group>
+                        <group>
+                            <field name="start" readonly="state == 'confirmed'"/>
+                            <field name="stop" readonly="state == 'confirmed'"/>
+                        </group>
                     </group>
+
+                    <notebook>
+                        <page string="Attendees">
+                            <field name="attendee_ids"/>
+                        </page>
+                        <page string= "notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
                 </sheet>
                 <chatter/>
             </form>
