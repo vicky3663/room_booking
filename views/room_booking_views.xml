@@ -89,6 +89,7 @@
                 <field name="organizer_id"/>
                 <field name="start"/>
                 <field name="stop"/>
+                <field name="duration"/>
             </list>
         </field>
     </record>
@@ -141,15 +142,16 @@
                         <group>
                             <field name="start" readonly="state == 'confirmed'"/>
                             <field name="stop" readonly="state == 'confirmed'"/>
+                            <field name="duration" readonly="state == 'confirmed'"/>
                         </group>
                     </group>
 
                     <notebook>
                         <page string="Attendees">
-                            <field name="attendee_ids"/>
+                            <field name="attendee_ids" readonly="state == 'confirmed'" />
                         </page>
-                        <page string= "notes">
-                            <field name="note"/>
+                        <page string= "notes" >
+                            <field name="note" readonly="state == 'confirmed'"/>
                         </page>
                     </notebook>
                 </sheet>

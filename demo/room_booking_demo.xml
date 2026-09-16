@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <!-- Equipment -->
+    <record id="demo_equipment_projector" model="room.booking.equipment">
+        <field name="name">Projector</field>
+    </record>
+
+    <record id="demo_equipment_whiteboard" model="room.booking.equipment">
+        <field name="name">Whiteboard</field>
+    </record>
+
+    <record id="demo_equipment_video_conference" model="room.booking.equipment">
+        <field name="name">Video Conference</field>
+    </record>
+
+        <!-- Rooms -->
+    <record id="demo_room_boardroom" model="room.booking.room">
+        <field name="name">Boardroom</field>
+        <field name="capacity">12</field>
+        <field name="floor">floor1</field>
+        <field name="equipment_ids"
+               eval="[(6, 0, [
+                   ref('demo_equipment_projector'),
+                   ref('demo_equipment_whiteboard')
+               ])]"/>
+    </record>
+
+    <record id="demo_room_training" model="room.booking.room">
+        <field name="name">Training Room</field>
+        <field name="capacity">20</field>
+        <field name="floor">floor2</field>
+        <field name="equipment_ids"
+               eval="[(6, 0, [
+                   ref('demo_equipment_whiteboard'),
+                   ref('demo_equipment_video_conference')
+               ])]"/>
+    </record>
+        <!-- Booking -->
+    <record id="demo_booking_boardroom" model="room.booking">
+        <field name="name">Project Planning Meeting</field>
+        <field name="room_id" ref="demo_room_boardroom"/>
+        <field name="organizer_id" ref="base.user_admin"/>
+        <field name="start">2026-11-01 09:00:00</field>
+        <field name="stop">2026-11-01 10:30:00</field>
+        <field name="state">confirmed</field>
+    </record>
+
+</odoo>

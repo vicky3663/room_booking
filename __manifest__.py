@@ -29,6 +29,8 @@ while providing room configuration, booking history, and reminders.
         "views/room_booking_views.xml",
         "views/room_booking_menu.xml",
     ],
-    "demo": [],
+    "demo": [
+         "demo/room_booking_demo.xml",
+            ],
     "assets": {},
 }
