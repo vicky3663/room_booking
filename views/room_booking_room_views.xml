@@ -35,10 +35,14 @@
                         </button>
                     </div>
                     <group>
+                        <group>
                         <field name="name"/>
                         <field name="active"/>
-                        <field name="capacity"/>
-                        <field name="floor"/>
+                        </group>
+                        <group>
+                            <field name="capacity"/>
+                            <field name="floor"/>
+                        </group>
                     </group>
                     <notebook>
                         <page string="Equipments">

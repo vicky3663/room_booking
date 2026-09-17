@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <!-- Manager group -->
+    <record id="group_room_booking_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="base.module_category_productivity"/>
+    </record>
+
+    <!-- Booking ownership rule for normal users -->
+    <record id="room_booking_rule_user_own_bookings" model="ir.rule">
+        <field name="name">Users: Own Bookings Only</field>
+        <field name="model_id" ref="model_room_booking"/>
+        <field name="domain_force">[('organizer_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Managers can access all bookings -->
+    <record id="room_booking_rule_manager_all_bookings" model="ir.rule">
+        <field name="name">Managers: All Bookings</field>
+        <field name="model_id" ref="model_room_booking"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_room_booking_manager'))]"/>
+    </record>
+
+</odoo>

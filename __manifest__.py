@@ -23,6 +23,7 @@ while providing room configuration, booking history, and reminders.
         "mail",
     ],
     "data": [
+        "security/room_booking_security.xml",
         "security/ir.model.access.csv",
         "views/room_booking_equipment_views.xml",
         "views/room_booking_room_views.xml",
