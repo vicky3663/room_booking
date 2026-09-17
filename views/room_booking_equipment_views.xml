@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_room_booking_equipment_list" model="ir.ui.view">
+        <field name="name">room.booking.equipment.list</field>
+        <field name="model">room.booking.equipment</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_room_booking_equipment_form" model="ir.ui.view">
+        <field name="name">room.booking.equipment.form</field>
+        <field name="model">room.booking.equipment</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

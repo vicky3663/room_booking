@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <!-- Send reminders for upcoming bookings every hour -->
+    <record id="ir_cron_room_booking_reminder" model="ir.cron">
+        <field name="name">Room Booking: Send Reminders</field>
+        <field name="model_id" ref="model_room_booking"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_send_booking_reminders()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active">True</field>
+    </record>
+
+</odoo>
