@@ -28,6 +28,12 @@ class RoomBooking(models.Model):
         store=True,
     )
 
+    reminder_sent = fields.Boolean(
+        string="Reminder Sent",
+        default=False,
+        copy=False,
+    )
+
     note = fields.Html(string="Notes")
 
     state = fields.Selection(
@@ -57,6 +63,22 @@ class RoomBooking(models.Model):
         for booking in self:
             if booking.state == "cancelled":
                 booking.state = "draft"
+
+    def action_send_reminder(self):
+        template = self.env.ref(
+            "room_booking.mail_template_room_booking_reminder"
+        )
+
+        for booking in self:
+            if booking.reminder_sent:
+                continue
+
+            template.send_mail(
+                booking.id,
+                force_send=True,
+            )
+
+            booking.reminder_sent = True
     
     @api.depends("start", "stop")
     def _compute_duration(self):
@@ -103,3 +125,31 @@ class RoomBooking(models.Model):
                 raise ValidationError(
                     _("This room is already booked during this time.")
                 )
+        
+    @api.model
+    def _cron_send_booking_reminders(self):
+            now = fields.Datetime.now()
+            reminder_limit = now + timedelta(hours=24)
+
+            bookings = self.search([
+                ("start", ">", now),
+                ("start", "<=", reminder_limit),
+                ("reminder_sent", "=", False),
+                ("state", "in", ("draft", "confirmed")),
+            ])
+
+            for booking in bookings:
+                booking.action_send_reminder()
+
+    @api.model
+    def _cron_cancel_stale_draft_bookings(self):
+        now = fields.Datetime.now()
+
+        stale_bookings = self.search([
+            ("state", "=", "draft"),
+            ("start", "<", now),
+        ])
+
+        stale_bookings.write({
+            "state": "cancelled",
+        })

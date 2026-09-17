@@ -137,6 +137,7 @@
                         <group>
                             <field name="name" readonly="state == 'confirmed'"/>
                             <field name="room_id" readonly="state == 'confirmed'"/>
+                            <field name="organizer_id" readonly="state == 'confirmed'"/>
                             
                         </group>
                         <group>

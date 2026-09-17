@@ -1,8 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
+from odoo import fields
 from odoo.exceptions import AccessError, ValidationError
 from odoo.tests.common import TransactionCase
-
 
 class TestRoomBooking(TransactionCase):
 
@@ -219,3 +219,124 @@ class TestRoomBooking(TransactionCase):
             self.env.ref("base.group_user"),
             menu.groups_id,
         )
+    def test_send_reminder_sets_reminder_sent(self):
+        booking = self.env["room.booking"].create({
+            "name": "Reminder Test",
+            "room_id": self.room.id,
+            "start": datetime(2026, 12, 10, 9, 0, 0),
+            "stop": datetime(2026, 12, 10, 10, 0, 0),
+        })
+
+        self.assertFalse(booking.reminder_sent)
+
+        booking.action_send_reminder()
+
+        self.assertTrue(booking.reminder_sent)
+
+    def test_send_reminder_does_not_send_twice(self):
+        booking = self.env["room.booking"].create({
+            "name": "Reminder Once Test",
+            "room_id": self.room.id,
+            "start": datetime(2026, 12, 11, 9, 0, 0),
+            "stop": datetime(2026, 12, 11, 10, 0, 0),
+        })
+
+        booking.action_send_reminder()
+
+        self.assertTrue(booking.reminder_sent)
+
+        booking.action_send_reminder()
+
+        self.assertTrue(booking.reminder_sent)
+
+    def test_cron_sends_reminders_for_upcoming_bookings(self):
+        now = fields.Datetime.now()
+
+        booking_to_remind = self.env["room.booking"].create({
+            "name": "Upcoming Reminder",
+            "room_id": self.room.id,
+            "start": now + timedelta(hours=2),
+            "stop": now + timedelta(hours=3),
+        })
+
+        booking_outside_window = self.env["room.booking"].create({
+            "name": "Far Future Booking",
+            "room_id": self.room.id,
+            "start": now + timedelta(hours=48),
+            "stop": now + timedelta(hours=49),
+        })
+
+        booking_already_sent = self.env["room.booking"].create({
+            "name": "Already Reminded",
+            "room_id": self.room.id,
+            "start": now + timedelta(hours=3),
+            "stop": now + timedelta(hours=4),
+            "reminder_sent": True,
+        })
+
+        self.env["room.booking"]._cron_send_booking_reminders()
+
+        self.assertTrue(booking_to_remind.reminder_sent)
+        self.assertFalse(booking_outside_window.reminder_sent)
+        self.assertTrue(booking_already_sent.reminder_sent)
+
+    def test_cron_cancels_stale_draft_bookings(self):
+        now = fields.Datetime.now()
+
+        stale_draft = self.env["room.booking"].create({
+            "name": "Stale Draft",
+            "room_id": self.room.id,
+            "start": now + timedelta(hours=2),
+            "stop": now + timedelta(hours=3),
+        })
+
+        future_draft = self.env["room.booking"].create({
+            "name": "Future Draft",
+            "room_id": self.room.id,
+            "start": now + timedelta(hours=4),
+            "stop": now + timedelta(hours=5),
+        })
+
+        confirmed_past_booking = self.env["room.booking"].create({
+            "name": "Past Confirmed Booking",
+            "room_id": self.room.id,
+            "start": now + timedelta(hours=6),
+            "stop": now + timedelta(hours=7),
+            "state": "confirmed",
+        })
+
+        # Move two bookings into the past directly in SQL.
+        # This bypasses the FR-6 ORM constraint so the cron
+        # can be tested with genuinely stale bookings.
+        stale_start = now - timedelta(hours=2)
+        stale_stop = now - timedelta(hours=1)
+
+        confirmed_start = now - timedelta(hours=4)
+        confirmed_stop = now - timedelta(hours=3)
+
+        self.env.cr.execute(
+            """
+            UPDATE room_booking
+            SET start = %s, stop = %s
+            WHERE id = %s
+            """,
+            (stale_start, stale_stop, stale_draft.id),
+        )
+
+        self.env.cr.execute(
+            """
+            UPDATE room_booking
+            SET start = %s, stop = %s
+            WHERE id = %s
+            """,
+            (confirmed_start, confirmed_stop, confirmed_past_booking.id),
+        )
+
+        stale_draft.invalidate_recordset(["start", "stop"])
+        confirmed_past_booking.invalidate_recordset(["start", "stop"])
+
+        self.env["room.booking"]._cron_cancel_stale_draft_bookings()
+
+        self.assertEqual(stale_draft.state, "cancelled")
+        self.assertEqual(future_draft.state, "draft")
+        self.assertEqual(confirmed_past_booking.state, "confirmed")

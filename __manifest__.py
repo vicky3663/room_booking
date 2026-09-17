@@ -25,6 +25,8 @@ while providing room configuration, booking history, and reminders.
     "data": [
         "security/room_booking_security.xml",
         "security/ir.model.access.csv",
+        "data/room_booking_mail_template.xml",
+        "data/room_booking_cron.xml",
         "views/room_booking_equipment_views.xml",
         "views/room_booking_room_views.xml",
         "views/room_booking_views.xml",
