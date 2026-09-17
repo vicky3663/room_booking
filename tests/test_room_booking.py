@@ -207,3 +207,15 @@ class TestRoomBooking(TransactionCase):
             self.room.with_user(self.manager).name,
             "Modified By Manager",
         )
+
+
+    def test_configuration_menu_is_manager_only(self):
+        menu = self.env.ref(
+            "room_booking.menu_room_booking_configuration"
+        )
+
+        self.assertIn(self.manager_group, menu.groups_id)
+        self.assertNotIn(
+            self.env.ref("base.group_user"),
+            menu.groups_id,
+        )
