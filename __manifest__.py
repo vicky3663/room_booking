@@ -15,7 +15,7 @@ while providing room configuration, booking history, and reminders.
     "author": "Dark",
     "website": "https://www.example.com",
     "license": "LGPL-3",
-    "icon": "/room_booking/static/description/icon.png",
+    "icon": "/room_booking/static/description/icon.jpg",
     "application": True,
     "installable": True,
     "depends": [
@@ -30,10 +30,15 @@ while providing room configuration, booking history, and reminders.
         "views/room_booking_equipment_views.xml",
         "views/room_booking_room_views.xml",
         "views/room_booking_views.xml",
+        "views/room_booking_find_room_views.xml",
         "views/room_booking_menu.xml",
     ],
     "demo": [
          "demo/room_booking_demo.xml",
             ],
-    "assets": {},
+    "assets": {
+        "web.assets_backend": [
+        "room_booking/static/src/css/room_booking.css",
+        ],
+    },
 }

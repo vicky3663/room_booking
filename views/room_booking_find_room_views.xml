@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Wizard Form -->
+    <record id="view_room_booking_find_room_wizard_form" model="ir.ui.view">
+        <field name="name">room.booking.find.room.wizard.form</field>
+        <field name="model">room.booking.find.room.wizard</field>
+        <field name="arch" type="xml">
+
+            <form string="Available Rooms">
+                <sheet>
+                    <group>
+                        <field name="start"/>
+                        <field name="stop"/>
+                        <field name="min_capacity"/>
+                    </group>
+
+                    <group>
+                        <button name="action_search_rooms"
+                                type="object"
+                                string="Find"
+                                class="btn-primary"/>
+                    </group>
+
+                    <separator string="Available Rooms"
+                            invisible="not available_room_ids"/>
+
+                    <field name="available_room_ids"
+                        nolabel="1"
+                        readonly="1"
+                        invisible="not available_room_ids">
+                        <list>
+                            <field name="name"/>
+                            <field name="capacity"/>
+                            <field name="floor"/>
+                        </list>
+                    </field>
+
+                    <!-- Single room selection -->
+                    <group invisible="not available_room_ids">
+                        <field name="room_id"
+                            string="Select a Room"
+                            domain="[('id', 'in', available_room_ids)]"/>
+                    </group>
+                </sheet>
+
+                <footer>
+
+                    <button name="action_create_booking"
+                            type="object"
+                            string="Book"
+                            class="btn-primary"
+                            invisible="not room_id"/>
+
+                    <button string="Cancel"
+                            special="cancel"
+                            class="btn-secondary"/>
+
+                </footer>
+
+            </form>
+
+        </field>
+    </record>
+
+</odoo>
+
+

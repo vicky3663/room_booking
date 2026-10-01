@@ -305,9 +305,7 @@ class TestRoomBooking(TransactionCase):
             "state": "confirmed",
         })
 
-        # Move two bookings into the past directly in SQL.
-        # This bypasses the FR-6 ORM constraint so the cron
-        # can be tested with genuinely stale bookings.
+       
         stale_start = now - timedelta(hours=2)
         stale_stop = now - timedelta(hours=1)
 
